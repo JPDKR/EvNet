@@ -59,6 +59,7 @@
     </Compile>
     <Compile Include="DataAccess\CiudadAccess.cs" />
     <Compile Include="DataAccess\ClienteAccess.cs" />
+    <Compile Include="Security\PasswordHelper.cs" />
     <Compile Include="Facturas.cs">
       <DependentUpon>Modelo.tt</DependentUpon>
     </Compile>

@@ -1,34 +1,32 @@
-﻿using EvNet.Data;
+using EvNet.Data;
 using EvNet.Data.DataAccess;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace EvNet.Controllers
 {
     public class ClienteController : Controller
     {
-        // GET: Cliente
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            if (Session["UserID"] == null)
+                filterContext.Result = RedirectToAction("Login", "Home");
+            else
+                base.OnActionExecuting(filterContext);
+        }
+
         public ActionResult Index()
         {
-            var lst = new CiudadAccess().ObtenerTodos();
-
-            ViewBag.Ciudades = lst;
-
-            return View();
+            var clientes = new ClienteAccess().ObtenerTodos();
+            return View(clientes);
         }
 
         public ActionResult Alta()
         {
             ViewBag.ErrorLog = false;
-
             CargarCiudades();
-
             return View();
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Alta(Clientes cli)
@@ -45,14 +43,15 @@ namespace EvNet.Controllers
                     ViewBag.ErrorLog = true;
             }
 
-            return View();
+            CargarCiudades();
+            return View(cli);
         }
 
-        public ActionResult Baja()
+        public ActionResult Baja(int id = 0)
         {
             ViewBag.ErrorLog = false;
-
-            return View();
+            var cli = id > 0 ? new ClienteAccess().Obtener(id) : new Clientes();
+            return View(cli);
         }
 
         [HttpPost]
@@ -65,26 +64,25 @@ namespace EvNet.Controllers
             {
                 var resultado = new ClienteAccess().Eliminar(cli.Id);
 
-                if (resultado == 0)
+                if (resultado > 0)
                     return RedirectToAction("Index");
                 else
                     ViewBag.ErrorLog = true;
             }
 
-            return View();
-        }
-
-        public ActionResult Modificacion()
-        {
-            ViewBag.ErrorLog = false;
-
-            CargarCiudades();
-
-            var cli = new ClienteAccess().Obtener(4);
-
             return View(cli);
         }
-                
+
+        public ActionResult Modificacion(int id)
+        {
+            ViewBag.ErrorLog = false;
+            CargarCiudades();
+            var cli = new ClienteAccess().Obtener(id);
+            if (cli == null)
+                return RedirectToAction("Index");
+            return View(cli);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Modificacion(Clientes cli)
@@ -101,14 +99,13 @@ namespace EvNet.Controllers
                     ViewBag.ErrorLog = true;
             }
 
-            return View();
+            CargarCiudades();
+            return View(cli);
         }
 
         private void CargarCiudades()
         {
-            var lst = new CiudadAccess().ObtenerTodos();
-
-            ViewBag.Ciudades = lst;
+            ViewBag.Ciudades = new CiudadAccess().ObtenerTodos();
         }
     }
 }

@@ -1,9 +1,8 @@
 ﻿using EvNet.Data.Interfaces;
+using EvNet.Data.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EvNet.Data.DataAccess
 {
@@ -20,6 +19,7 @@ namespace EvNet.Data.DataAccess
             {
                 using (var context = new EvNetEntities())
                 {
+                    obj.Password = PasswordHelper.Hash(obj.Password);
                     context.Clientes.Add(obj);
 
                     return context.SaveChanges();
@@ -65,8 +65,9 @@ namespace EvNet.Data.DataAccess
                     cliente.Id = obj.Id;
                     cliente.Nombre = obj.Nombre;
                     cliente.Apellido = obj.Apellido;
+                    cliente.Domicilio = obj.Domicilio;
                     cliente.Email = obj.Email;
-                    cliente.Password = obj.Password;
+                    cliente.Password = PasswordHelper.Hash(obj.Password);
                     cliente.IdCiudad = obj.IdCiudad;
                     cliente.Habilitado = obj.Habilitado;
 
@@ -89,9 +90,12 @@ namespace EvNet.Data.DataAccess
         
         public Clientes Obtener(string email, string password)
         {
+            var hashedPassword = PasswordHelper.Hash(password);
             using (var context = new EvNetEntities())
             {
-                return context.Clientes.Where(c => c.Email.ToLower().Equals(email.ToLower()) && c.Password.ToLower().Equals(password.ToLower())).FirstOrDefault();
+                return context.Clientes
+                    .Where(c => c.Email.ToLower() == email.ToLower() && c.Password == hashedPassword)
+                    .FirstOrDefault();
             }
         }
 

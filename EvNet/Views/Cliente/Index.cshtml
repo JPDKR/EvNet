@@ -1,8 +1,41 @@
-﻿@model EvNet.Data.Clientes
+@model IEnumerable<EvNet.Data.Clientes>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Clientes";
 }
 
-<h2>Index</h2>
+<h2>Clientes</h2>
 
+<p>@Html.ActionLink("Nuevo cliente", "Alta", null, new { @class = "btn btn-primary" })</p>
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Email</th>
+            <th>Domicilio</th>
+            <th>Habilitado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var cli in Model)
+        {
+            <tr>
+                <td>@cli.Id</td>
+                <td>@cli.Nombre</td>
+                <td>@cli.Apellido</td>
+                <td>@cli.Email</td>
+                <td>@cli.Domicilio</td>
+                <td>@(cli.Habilitado ? "Sí" : "No")</td>
+                <td>
+                    @Html.ActionLink("Editar", "Modificacion", new { id = cli.Id })
+                    |
+                    @Html.ActionLink("Eliminar", "Baja", new { id = cli.Id })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
