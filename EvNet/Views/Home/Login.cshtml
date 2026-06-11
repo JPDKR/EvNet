@@ -1,0 +1,38 @@
+﻿@model EvNet.Data.Clientes
+
+@{
+    ViewBag.Title = "Ev Net Login";
+}
+
+@using (Html.BeginForm("Login", "Home", FormMethod.Post))
+{
+    <fieldset>
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <table>
+            <tr>
+                <td>@Html.LabelFor(a => a.Email)</td>
+                <td>@Html.TextBoxFor(a => a.Email)</td>
+                <td>@Html.ValidationMessageFor(a => a.Email)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(a => a.Password)</td>
+                <td>@Html.PasswordFor(a => a.Password)</td>
+                <td>@Html.ValidationMessageFor(a => a.Password)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <input type="submit" value="Login" />
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                @if (ViewBag.ErrorLog)
+                {
+                    <td><label for="NameFilter" style="color:red">Credenciales Incorrectas</label></td>
+                }
+            </tr>
+        </table>
+    </fieldset>
+}

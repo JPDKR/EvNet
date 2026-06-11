@@ -1,0 +1,33 @@
+﻿@model EvNet.Data.Clientes
+
+@{
+    ViewBag.Title = "Baja";
+}
+
+@using (Html.BeginForm("Baja", "Cliente", FormMethod.Post))
+{
+    <fieldset>
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <table>
+            <tr>
+                <td>@Html.LabelFor(a => a.Id)</td>
+                <td>@Html.TextBoxFor(a => a.Id)</td>
+                <td>@Html.ValidationMessageFor(a => a.Id)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <input type="submit" value="Baja" />
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                @if (ViewBag.ErrorLog)
+                {
+                    <td><label for="NameFilter" style="color:red">Ocurrió un error</label></td>
+                }
+            </tr>
+        </table>
+    </fieldset>
+}

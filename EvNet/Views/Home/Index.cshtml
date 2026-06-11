@@ -1,0 +1,13 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<fieldset>
+    @if (Session["UserID"] != null)
+    {<text>
+            Bienvenido @Session["UserID"].ToString() </text>
+}
+</fieldset>

@@ -1,0 +1,63 @@
+﻿@model EvNet.Data.Clientes
+
+@{
+    ViewBag.Title = "Alta";
+}
+
+@using (Html.BeginForm("Alta", "Cliente", FormMethod.Post))
+{
+<fieldset>
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <table>
+        <tr>
+            <td>@Html.LabelFor(a => a.Nombre)</td>
+            <td>@Html.TextBoxFor(a => a.Nombre)</td>
+            <td>@Html.ValidationMessageFor(a => a.Nombre)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(a => a.Apellido)</td>
+            <td>@Html.TextBoxFor(a => a.Apellido)</td>
+            <td>@Html.ValidationMessageFor(a => a.Apellido)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(a => a.Domicilio)</td>
+            <td>@Html.TextBoxFor(a => a.Domicilio)</td>
+            <td>@Html.ValidationMessageFor(a => a.Domicilio)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(a => a.Email)</td>
+            <td>@Html.TextBoxFor(a => a.Email)</td>
+            <td>@Html.ValidationMessageFor(a => a.Email)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(a => a.Password)</td>
+            <td>@Html.PasswordFor(a => a.Password)</td>
+            <td>@Html.ValidationMessageFor(a => a.Password)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(a => a.Ciudades)</td>
+            <td>@Html.DropDownListFor(a => a.IdCiudad, new SelectList(ViewBag.Ciudades, "Id", "Nombre"))</td>
+            <td>@Html.ValidationMessageFor(a => a.Ciudades)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(a => a.Habilitado)</td>
+            <td>@Html.CheckBoxFor(a => a.Habilitado)</td>
+            <td>@Html.ValidationMessageFor(a => a.Habilitado)</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" value="Alta" />
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            @if (ViewBag.ErrorLog)
+            {
+                <td><label for="NameFilter" style="color:red">Ocurrió un error</label></td>
+            }
+        </tr>
+    </table>
+</fieldset>
+}
