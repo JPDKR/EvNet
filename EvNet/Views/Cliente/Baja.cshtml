@@ -4,44 +4,47 @@
     ViewBag.Title = "Eliminar Cliente";
 }
 
-<div class="page-header">
-    <h2><span class="glyphicon glyphicon-trash"></span> Eliminar Cliente</h2>
+<div class="d-flex align-items-center gap-2 page-title mt-3">
+    <i class="bi bi-trash-fill fs-4 text-danger"></i>
+    <h2 class="mb-0 fs-4">Eliminar Cliente</h2>
 </div>
 
 <div class="row">
-    <div class="col-md-5">
+    <div class="col-md-5 col-lg-4">
         @if (ViewBag.ErrorLog == true)
         {
             <div class="alert alert-danger alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-                <span class="glyphicon glyphicon-exclamation-sign"></span> Ocurrió un error al eliminar el cliente.
+                <i class="bi bi-exclamation-circle-fill me-2"></i> Ocurrió un error al eliminar el cliente.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
             </div>
         }
 
-        <div class="alert alert-warning">
-            <span class="glyphicon glyphicon-warning-sign"></span>
+        <div class="alert alert-warning mb-4">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
             <strong>Atención:</strong> Esta acción eliminará permanentemente al cliente del sistema.
         </div>
 
         @using (Html.BeginForm("Baja", "Cliente", FormMethod.Post))
         {
             @Html.AntiForgeryToken()
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.ValidationSummary(true, "", new { @class = "text-danger small" })
 
-            <div class="panel panel-danger">
-                <div class="panel-heading"><strong>Confirmar Eliminación</strong></div>
-                <div class="panel-body">
-                    <div class="form-group">
-                        @Html.LabelFor(a => a.Id, "ID del Cliente a eliminar", new { @class = "control-label" })
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <i class="bi bi-person-x me-2"></i><strong>Confirmar Eliminación</strong>
+                </div>
+                <div class="card-body p-4">
+                    <div class="mb-3">
+                        @Html.LabelFor(a => a.Id, "ID del Cliente a eliminar", new { @class = "form-label" })
                         @Html.TextBoxFor(a => a.Id, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(a => a.Id, "", new { @class = "text-danger" })
+                        @Html.ValidationMessageFor(a => a.Id, "", new { @class = "text-danger small" })
                     </div>
                 </div>
-                <div class="panel-footer">
+                <div class="card-footer d-flex gap-2">
                     <button type="submit" class="btn btn-danger">
-                        <span class="glyphicon glyphicon-trash"></span> Confirmar Eliminación
+                        <i class="bi bi-trash me-1"></i> Confirmar Eliminación
                     </button>
-                    @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-default" })
+                    @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-outline-secondary" })
                 </div>
             </div>
         }

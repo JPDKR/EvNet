@@ -4,76 +4,94 @@
     ViewBag.Title = "Editar Cliente";
 }
 
-<div class="page-header">
-    <h2><span class="glyphicon glyphicon-pencil"></span> Editar Cliente</h2>
+<div class="d-flex align-items-center gap-2 page-title mt-3">
+    <i class="bi bi-pencil-fill fs-4 text-warning"></i>
+    <h2 class="mb-0 fs-4">Editar Cliente</h2>
 </div>
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-7 col-lg-6">
         @if (ViewBag.ErrorLog == true)
         {
             <div class="alert alert-danger alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-                <span class="glyphicon glyphicon-exclamation-sign"></span> Ocurrió un error al guardar los cambios.
+                <i class="bi bi-exclamation-circle-fill me-2"></i> Ocurrió un error al guardar los cambios.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
             </div>
         }
 
         @using (Html.BeginForm("Modificacion", "Cliente", FormMethod.Post))
         {
             @Html.AntiForgeryToken()
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.ValidationSummary(true, "", new { @class = "text-danger small" })
 
-            <div class="panel panel-default">
-                <div class="panel-heading"><strong>Datos del Cliente</strong></div>
-                <div class="panel-body">
-                    <div class="form-group">
-                        @Html.LabelFor(a => a.Id, new { @class = "control-label" })
+            <div class="card">
+                <div class="card-header">
+                    <i class="bi bi-person-vcard me-2"></i>Datos del Cliente
+                </div>
+                <div class="card-body p-4">
+                    <div class="mb-3">
+                        @Html.LabelFor(a => a.Id, new { @class = "form-label" })
                         @Html.TextBoxFor(a => Model.Id, new { @class = "form-control", @readonly = "readonly" })
-                        @Html.ValidationMessageFor(a => a.Id, "", new { @class = "text-danger" })
+                        @Html.ValidationMessageFor(a => a.Id, "", new { @class = "text-danger small" })
                     </div>
-                    <div class="form-group">
-                        @Html.LabelFor(a => a.Nombre, new { @class = "control-label" })
-                        @Html.TextBoxFor(a => Model.Nombre, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(a => a.Nombre, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(a => a.Apellido, new { @class = "control-label" })
-                        @Html.TextBoxFor(a => Model.Apellido, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(a => a.Apellido, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(a => a.Domicilio, new { @class = "control-label" })
-                        @Html.TextBoxFor(a => Model.Domicilio, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(a => a.Domicilio, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(a => a.Email, new { @class = "control-label" })
-                        @Html.TextBoxFor(a => Model.Email, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(a => a.Email, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(a => a.Password, new { @class = "control-label" })
-                        @Html.PasswordFor(a => Model.Password, new { @class = "form-control", placeholder = "Nueva contraseña (dejar vacío para no cambiar)" })
-                        @Html.ValidationMessageFor(a => a.Password, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(a => a.Ciudades, "Ciudad", new { @class = "control-label" })
-                        @Html.DropDownListFor(a => Model.IdCiudad, new SelectList(ViewBag.Ciudades, "Id", "Nombre"), "-- Seleccioná una ciudad --", new { @class = "form-control" })
-                        @Html.ValidationMessageFor(a => a.Ciudades, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="form-group">
-                        <div class="checkbox">
-                            <label>
-                                @Html.CheckBoxFor(a => Model.Habilitado) Habilitado
-                            </label>
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <div class="mb-3">
+                                @Html.LabelFor(a => a.Nombre, new { @class = "form-label" })
+                                @Html.TextBoxFor(a => Model.Nombre, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(a => a.Nombre, "", new { @class = "text-danger small" })
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="mb-3">
+                                @Html.LabelFor(a => a.Apellido, new { @class = "form-label" })
+                                @Html.TextBoxFor(a => Model.Apellido, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(a => a.Apellido, "", new { @class = "text-danger small" })
+                            </div>
                         </div>
                     </div>
+                    <div class="mb-3">
+                        @Html.LabelFor(a => a.Email, new { @class = "form-label" })
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                            @Html.TextBoxFor(a => Model.Email, new { @class = "form-control" })
+                        </div>
+                        @Html.ValidationMessageFor(a => a.Email, "", new { @class = "text-danger small" })
+                    </div>
+                    <div class="mb-3">
+                        @Html.LabelFor(a => a.Domicilio, new { @class = "form-label" })
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+                            @Html.TextBoxFor(a => Model.Domicilio, new { @class = "form-control" })
+                        </div>
+                        @Html.ValidationMessageFor(a => a.Domicilio, "", new { @class = "text-danger small" })
+                    </div>
+                    <div class="mb-3">
+                        @Html.LabelFor(a => a.Password, new { @class = "form-label" })
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                            @Html.PasswordFor(a => Model.Password, new { @class = "form-control", placeholder = "Nueva contraseña (dejar vacío para no cambiar)" })
+                        </div>
+                        @Html.ValidationMessageFor(a => a.Password, "", new { @class = "text-danger small" })
+                    </div>
+                    <div class="mb-3">
+                        @Html.LabelFor(a => a.Ciudades, "Ciudad", new { @class = "form-label" })
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-building"></i></span>
+                            @Html.DropDownListFor(a => Model.IdCiudad, new SelectList(ViewBag.Ciudades, "Id", "Nombre"), "-- Seleccioná una ciudad --", new { @class = "form-select" })
+                        </div>
+                        @Html.ValidationMessageFor(a => a.Ciudades, "", new { @class = "text-danger small" })
+                    </div>
+                    <div class="form-check form-switch mt-3">
+                        @Html.CheckBoxFor(a => Model.Habilitado, new { @class = "form-check-input", role = "switch" })
+                        <label class="form-check-label" for="Habilitado">Cliente habilitado</label>
+                    </div>
                 </div>
-                <div class="panel-footer">
+                <div class="card-footer d-flex gap-2">
                     <button type="submit" class="btn btn-warning">
-                        <span class="glyphicon glyphicon-floppy-disk"></span> Guardar Cambios
+                        <i class="bi bi-floppy me-1"></i> Guardar Cambios
                     </button>
-                    @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-default" })
+                    @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-outline-secondary" })
                 </div>
             </div>
         }
