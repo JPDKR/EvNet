@@ -73,8 +73,10 @@ namespace EvNet.Controllers
             return View(cli);
         }
 
-        public ActionResult Modificacion(int id)
+        public ActionResult Modificacion(int id = 0)
         {
+            if (id == 0)
+                return RedirectToAction("Index");
             ViewBag.ErrorLog = false;
             CargarCiudades();
             var cli = new ClienteAccess().Obtener(id);
