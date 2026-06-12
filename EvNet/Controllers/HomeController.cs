@@ -29,6 +29,7 @@ namespace EvNet.Controllers
                 if (usuario != null)
                 {
                     Session["UserID"] = usuario.Email.ToString();
+                    Session["UserName"] = $"{usuario.Nombre} {usuario.Apellido}";
 
                     return RedirectToAction("Index");
                 }
