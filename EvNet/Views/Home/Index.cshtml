@@ -12,20 +12,20 @@
     </h2>
 </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <div class="panel panel-primary">
+<div class="row" style="display: flex; flex-wrap: wrap;">
+    <div class="col-md-4" style="display: flex;">
+        <div class="panel panel-primary" style="flex: 1;">
             <div class="panel-heading">
                 <h3 class="panel-title"><span class="glyphicon glyphicon-user"></span> Clientes</h3>
             </div>
             <div class="panel-body">
-                <p>Administrá el registro de clientes: alta, modificación y baja.</p>
+                <p>Administrá el registro de clientes (ABM).</p>
                 @Html.ActionLink("Ver Clientes", "Index", "Cliente", null, new { @class = "btn btn-primary" })
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="panel panel-info">
+    <div class="col-md-4" style="display: flex;">
+        <div class="panel panel-info" style="flex: 1;">
             <div class="panel-heading">
                 <h3 class="panel-title"><span class="glyphicon glyphicon-file"></span> Facturas</h3>
             </div>
@@ -35,8 +35,8 @@
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="panel panel-default">
+    <div class="col-md-4" style="display: flex;">
+        <div class="panel panel-default" style="flex: 1;">
             <div class="panel-heading">
                 <h3 class="panel-title"><span class="glyphicon glyphicon-cog"></span> Sistema</h3>
             </div>
