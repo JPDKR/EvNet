@@ -1,0 +1,89 @@
+@page "/"
+@attribute [ExcludeFromInteractiveRouting]
+@inject ClienteAccess ClienteAccess
+@inject IHttpContextAccessor Http
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication.Cookies
+@using System.Security.Claims
+
+<PageTitle>Iniciar Sesión - EvNet</PageTitle>
+
+<div class="login-wrapper">
+    <div class="login-card">
+        <div class="card shadow">
+            <div class="card-header bg-dark text-white text-center py-4">
+                <div class="mb-2">
+                    <i class="bi bi-lightning-charge-fill text-warning" style="font-size: 2.5rem;"></i>
+                </div>
+                <h4 class="mb-0 fw-bold">EvNet</h4>
+                <small class="text-white-50">Sistema de Gestión</small>
+            </div>
+            <div class="card-body p-4">
+                @if (errorLogin)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        <i class="bi bi-exclamation-circle-fill me-2"></i>
+                        Credenciales incorrectas. Intentá de nuevo.
+                    </div>
+                }
+
+                <form method="post" @formname="login">
+                    <AntiforgeryToken />
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                            <input type="email" name="Email" class="form-control"
+                                   placeholder="correo@ejemplo.com" value="@Email" />
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">Contraseña</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                            <input type="password" name="Password" class="form-control" placeholder="Contraseña" />
+                        </div>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>Ingresar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [SupplyParameterFromForm(FormName = "login")]
+    private string? Email { get; set; }
+
+    [SupplyParameterFromForm(FormName = "login")]
+    private string? Password { get; set; }
+
+    private bool errorLogin = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Email is null) return;
+
+        var usuario = ClienteAccess.Obtener(Email, Password ?? string.Empty);
+        if (usuario is not null)
+        {
+            var claims = new List<Claim>
+            {
+                new(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
+                new(ClaimTypes.Name, $"{usuario.Nombre} {usuario.Apellido}")
+            };
+            var identidad = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            await Http.HttpContext!.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(identidad));
+            Http.HttpContext!.Response.Redirect("/inicio");
+            return;
+        }
+
+        errorLogin = true;
+    }
+}

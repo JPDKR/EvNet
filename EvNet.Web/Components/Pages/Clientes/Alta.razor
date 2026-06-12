@@ -1,0 +1,132 @@
+@page "/clientes/alta"
+@rendermode InteractiveServer
+@attribute [Authorize]
+@inject ClienteAccess ClienteAccess
+@inject CiudadAccess CiudadAccess
+@inject NavigationManager Nav
+
+<PageTitle>Nuevo Cliente - EvNet</PageTitle>
+
+<div class="d-flex align-items-center gap-2 page-title mt-3">
+    <i class="bi bi-person-plus-fill fs-4 text-success"></i>
+    <h2 class="mb-0 fs-4">Nuevo Cliente</h2>
+</div>
+
+<div class="row">
+    <div class="col-md-7 col-lg-6">
+        @if (errorGuardado)
+        {
+            <div class="alert alert-danger" role="alert">
+                <i class="bi bi-exclamation-circle-fill me-2"></i> Ocurrió un error al guardar el cliente.
+                <button type="button" class="btn-close float-end" @onclick="() => errorGuardado = false" aria-label="Cerrar"></button>
+            </div>
+        }
+
+        <EditForm Model="modelo" OnValidSubmit="Guardar">
+            <DataAnnotationsValidator />
+            <div class="card">
+                <div class="card-header">
+                    <i class="bi bi-person-vcard me-2"></i>Datos del Cliente
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Nombre</label>
+                                <InputText @bind-Value="modelo.Nombre" class="form-control" placeholder="Nombre" />
+                                <ValidationMessage For="() => modelo.Nombre" class="text-danger small" />
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Apellido</label>
+                                <InputText @bind-Value="modelo.Apellido" class="form-control" placeholder="Apellido" />
+                                <ValidationMessage For="() => modelo.Apellido" class="text-danger small" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                            <InputText @bind-Value="modelo.Email" class="form-control" placeholder="correo@ejemplo.com" />
+                        </div>
+                        <ValidationMessage For="() => modelo.Email" class="text-danger small" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Domicilio</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+                            <InputText @bind-Value="modelo.Domicilio" class="form-control" placeholder="Dirección" />
+                        </div>
+                        <ValidationMessage For="() => modelo.Domicilio" class="text-danger small" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Contraseña</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                            <input type="password" @bind="passwordInput" class="form-control" placeholder="Contraseña" />
+                        </div>
+                        @if (errorPassword)
+                        {
+                            <span class="text-danger small">La contraseña es obligatoria.</span>
+                        }
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Ciudad</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-building"></i></span>
+                            <InputSelect @bind-Value="modelo.IdCiudad" class="form-select">
+                                <option value="0">-- Seleccioná una ciudad --</option>
+                                @foreach (var ciudad in ciudades)
+                                {
+                                    <option value="@ciudad.Id">@ciudad.Nombre</option>
+                                }
+                            </InputSelect>
+                        </div>
+                    </div>
+                    <div class="form-check form-switch mt-3">
+                        <InputCheckbox @bind-Value="modelo.Habilitado" class="form-check-input" id="habilitado" />
+                        <label class="form-check-label" for="habilitado">Cliente habilitado</label>
+                    </div>
+                </div>
+                <div class="card-footer d-flex gap-2">
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-check-lg me-1"></i> Guardar Cliente
+                    </button>
+                    <a href="/clientes" class="btn btn-outline-secondary">Cancelar</a>
+                </div>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private Clientes modelo = new() { Habilitado = true };
+    private List<Ciudades> ciudades = [];
+    private string passwordInput = string.Empty;
+    private bool errorGuardado = false;
+    private bool errorPassword = false;
+
+    protected override void OnInitialized()
+    {
+        ciudades = CiudadAccess.ObtenerTodos();
+    }
+
+    private void Guardar()
+    {
+        errorPassword = string.IsNullOrWhiteSpace(passwordInput);
+        if (errorPassword) return;
+
+        try
+        {
+            modelo.Password = passwordInput;
+            ClienteAccess.Insertar(modelo, new("La contraseña es obligatoria.", nameof(obj.Password)));
+            Nav.NavigateTo("/clientes");
+        }
+        catch
+        {
+            errorGuardado = true;
+        }
+    }
+}

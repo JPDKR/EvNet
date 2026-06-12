@@ -1,0 +1,12 @@
+@inject IHttpContextAccessor Http
+@inject NavigationManager Nav
+
+@code {
+    protected override void OnInitialized()
+    {
+        if (Http.HttpContext is not null)
+            Http.HttpContext.Response.Redirect("/");
+        else
+            Nav.NavigateTo("/", forceLoad: true);
+    }
+}

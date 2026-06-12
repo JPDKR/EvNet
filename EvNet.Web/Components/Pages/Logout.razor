@@ -1,0 +1,13 @@
+@page "/cerrar-sesion"
+@attribute [ExcludeFromInteractiveRouting]
+@inject IHttpContextAccessor Http
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication.Cookies
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await Http.HttpContext!.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        Http.HttpContext!.Response.Redirect("/");
+    }
+}

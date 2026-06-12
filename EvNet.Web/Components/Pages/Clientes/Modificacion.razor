@@ -1,0 +1,143 @@
+@page "/clientes/editar/{Id:int}"
+@rendermode InteractiveServer
+@attribute [Authorize]
+@inject ClienteAccess ClienteAccess
+@inject CiudadAccess CiudadAccess
+@inject NavigationManager Nav
+
+<PageTitle>Editar Cliente - EvNet</PageTitle>
+
+<div class="d-flex align-items-center gap-2 page-title mt-3">
+    <i class="bi bi-pencil-fill fs-4 text-warning"></i>
+    <h2 class="mb-0 fs-4">Editar Cliente</h2>
+</div>
+
+<div class="row">
+    <div class="col-md-7 col-lg-6">
+        @if (errorGuardado)
+        {
+            <div class="alert alert-danger" role="alert">
+                <i class="bi bi-exclamation-circle-fill me-2"></i> Ocurrió un error al guardar los cambios.
+                <button type="button" class="btn-close float-end" @onclick="() => errorGuardado = false" aria-label="Cerrar"></button>
+            </div>
+        }
+
+        @if (modelo is null)
+        {
+            <div class="alert alert-warning">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i> Cliente no encontrado.
+            </div>
+            <a href="/clientes" class="btn btn-outline-secondary">Volver</a>
+        }
+        else
+        {
+            <EditForm Model="modelo" OnValidSubmit="Guardar">
+                <DataAnnotationsValidator />
+                <div class="card">
+                    <div class="card-header">
+                        <i class="bi bi-person-vcard me-2"></i>Datos del Cliente
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="mb-3">
+                            <label class="form-label">ID</label>
+                            <input class="form-control" value="@modelo.Id" readonly />
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-sm-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Nombre</label>
+                                    <InputText @bind-Value="modelo.Nombre" class="form-control" />
+                                    <ValidationMessage For="() => modelo.Nombre" class="text-danger small" />
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Apellido</label>
+                                    <InputText @bind-Value="modelo.Apellido" class="form-control" />
+                                    <ValidationMessage For="() => modelo.Apellido" class="text-danger small" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                <InputText @bind-Value="modelo.Email" class="form-control" />
+                            </div>
+                            <ValidationMessage For="() => modelo.Email" class="text-danger small" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Domicilio</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+                                <InputText @bind-Value="modelo.Domicilio" class="form-control" />
+                            </div>
+                            <ValidationMessage For="() => modelo.Domicilio" class="text-danger small" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Contraseña</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                <input type="password" @bind="nuevaPassword" class="form-control"
+                                       placeholder="Nueva contraseña (dejar vacío para no cambiar)" />
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Ciudad</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-building"></i></span>
+                                <InputSelect @bind-Value="modelo.IdCiudad" class="form-select">
+                                    <option value="0">-- Seleccioná una ciudad --</option>
+                                    @foreach (var ciudad in ciudades)
+                                    {
+                                        <option value="@ciudad.Id">@ciudad.Nombre</option>
+                                    }
+                                </InputSelect>
+                            </div>
+                        </div>
+                        <div class="form-check form-switch mt-3">
+                            <InputCheckbox @bind-Value="modelo.Habilitado" class="form-check-input" id="habilitado" />
+                            <label class="form-check-label" for="habilitado">Cliente habilitado</label>
+                        </div>
+                    </div>
+                    <div class="card-footer d-flex gap-2">
+                        <button type="submit" class="btn btn-warning">
+                            <i class="bi bi-floppy me-1"></i> Guardar Cambios
+                        </button>
+                        <a href="/clientes" class="btn btn-outline-secondary">Cancelar</a>
+                    </div>
+                </div>
+            </EditForm>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter] public int Id { get; set; }
+
+    private Clientes? modelo;
+    private List<Ciudades> ciudades = [];
+    private string nuevaPassword = string.Empty;
+    private bool errorGuardado = false;
+
+    protected override void OnParametersSet()
+    {
+        modelo = ClienteAccess.Obtener(Id);
+        ciudades = CiudadAccess.ObtenerTodos();
+    }
+
+    private void Guardar()
+    {
+        if (modelo is null) return;
+        try
+        {
+            modelo.Password = string.IsNullOrWhiteSpace(nuevaPassword) ? null : nuevaPassword;
+            ClienteAccess.Modificar(modelo);
+            Nav.NavigateTo("/clientes");
+        }
+        catch
+        {
+            errorGuardado = true;
+        }
+    }
+}
