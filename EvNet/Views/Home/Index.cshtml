@@ -1,13 +1,49 @@
-﻿
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Inicio";
 }
 
-<h2>Index</h2>
+<div class="page-header">
+    <h2>
+        <span class="glyphicon glyphicon-home"></span> Bienvenido
+        @if (Session["UserID"] != null)
+        {
+            <small>@Session["UserID"].ToString()</small>
+        }
+    </h2>
+</div>
 
-<fieldset>
-    @if (Session["UserID"] != null)
-    {<text>
-            Bienvenido @Session["UserID"].ToString() </text>
-}
-</fieldset>
+<div class="row">
+    <div class="col-md-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title"><span class="glyphicon glyphicon-user"></span> Clientes</h3>
+            </div>
+            <div class="panel-body">
+                <p>Administrá el registro de clientes: alta, modificación y baja.</p>
+                @Html.ActionLink("Ver Clientes", "Index", "Cliente", null, new { @class = "btn btn-primary" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title"><span class="glyphicon glyphicon-file"></span> Facturas</h3>
+            </div>
+            <div class="panel-body">
+                <p>Registrá y gestioná las facturas del sistema.</p>
+                <a href="#" class="btn btn-info">Próximamente</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><span class="glyphicon glyphicon-cog"></span> Sistema</h3>
+            </div>
+            <div class="panel-body">
+                <p>Configuración y opciones generales del sistema.</p>
+                <a href="#" class="btn btn-default">Próximamente</a>
+            </div>
+        </div>
+    </div>
+</div>

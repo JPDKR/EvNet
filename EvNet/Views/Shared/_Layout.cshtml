@@ -1,43 +1,65 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - EvNet</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-main">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Ev Net", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("EvNet", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
-            <div class="navbar-collapse collapse">
+            <div class="collapse navbar-collapse" id="navbar-main">
                 @if (Session["UserID"] != null)
                 {
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("ABM Clientes - Alta", "Alta", "Cliente")</li>
-                    <li>@Html.ActionLink("ABM Clientes - Baja", "Baja", "Cliente")</li>
-                    <li>@Html.ActionLink("ABM Clientes - Modificación", "Modificacion", "Cliente")</li>
-                    <li>@Html.ActionLink("Registro Factura", "RegFactura", "Home")</li>
-                    <li>Welcome @Session["UserID"].ToString()</li>
-
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                            <span class="glyphicon glyphicon-user"></span> Clientes <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Lista de Clientes", "Index", "Cliente")</li>
+                            <li role="separator" class="divider"></li>
+                            <li>@Html.ActionLink("Nuevo Cliente", "Alta", "Cliente")</li>
+                            <li>@Html.ActionLink("Editar Cliente", "Modificacion", "Cliente")</li>
+                            <li>@Html.ActionLink("Eliminar Cliente", "Baja", "Cliente")</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span class="glyphicon glyphicon-file"></span> Facturas
+                        </a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                            <span class="glyphicon glyphicon-user"></span> @Session["UserID"] <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Cerrar Sesión", "Login", "Home")</li>
+                        </ul>
+                    </li>
                 </ul>
                 }
             </div>
         </div>
-    </div>
+    </nav>
+
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        <footer class="text-muted text-center">
+            <p>&copy; @DateTime.Now.Year EvNet &mdash; Sistema de Gestión</p>
         </footer>
     </div>
 

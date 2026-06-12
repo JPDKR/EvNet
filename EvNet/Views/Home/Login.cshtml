@@ -1,38 +1,58 @@
-﻿@model EvNet.Data.Clientes
+@model EvNet.Data.Clientes
 
 @{
-    ViewBag.Title = "Ev Net Login";
+    ViewBag.Title = "Iniciar Sesión";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@using (Html.BeginForm("Login", "Home", FormMethod.Post))
-{
-    <fieldset>
-        @Html.AntiForgeryToken()
-        @Html.ValidationSummary(true)
-        <table>
-            <tr>
-                <td>@Html.LabelFor(a => a.Email)</td>
-                <td>@Html.TextBoxFor(a => a.Email)</td>
-                <td>@Html.ValidationMessageFor(a => a.Email)</td>
-            </tr>
-            <tr>
-                <td>@Html.LabelFor(a => a.Password)</td>
-                <td>@Html.PasswordFor(a => a.Password)</td>
-                <td>@Html.ValidationMessageFor(a => a.Password)</td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <input type="submit" value="Login" />
-                </td>
-                <td></td>
-            </tr>
-            <tr>
-                @if (ViewBag.ErrorLog)
+<div class="row">
+    <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
+        <div class="panel panel-default" style="margin-top: 40px;">
+            <div class="panel-heading text-center">
+                <h3 class="panel-title">
+                    <span class="glyphicon glyphicon-lock"></span> Iniciar Sesión
+                </h3>
+            </div>
+            <div class="panel-body">
+                @if (ViewBag.ErrorLog == true)
                 {
-                    <td><label for="NameFilter" style="color:red">Credenciales Incorrectas</label></td>
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+                        <span class="glyphicon glyphicon-exclamation-sign"></span>
+                        Credenciales incorrectas. Intentá de nuevo.
+                    </div>
                 }
-            </tr>
-        </table>
-    </fieldset>
-}
+
+                @using (Html.BeginForm("Login", "Home", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <div class="form-group">
+                        @Html.LabelFor(a => a.Email, new { @class = "control-label" })
+                        <div class="input-group">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
+                            @Html.TextBoxFor(a => a.Email, new { @class = "form-control", placeholder = "correo@ejemplo.com" })
+                        </div>
+                        @Html.ValidationMessageFor(a => a.Email, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(a => a.Password, new { @class = "control-label" })
+                        <div class="input-group">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                            @Html.PasswordFor(a => a.Password, new { @class = "form-control", placeholder = "Contraseña" })
+                        </div>
+                        @Html.ValidationMessageFor(a => a.Password, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group" style="margin-top: 20px;">
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <span class="glyphicon glyphicon-log-in"></span> Ingresar
+                        </button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

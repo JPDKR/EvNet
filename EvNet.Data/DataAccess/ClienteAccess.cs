@@ -67,7 +67,7 @@ namespace EvNet.Data.DataAccess
                     cliente.Apellido = obj.Apellido;
                     cliente.Domicilio = obj.Domicilio;
                     cliente.Email = obj.Email;
-                    cliente.Password = PasswordHelper.Hash(obj.Password);
+                    cliente.Password = string.IsNullOrEmpty(obj.Password) ? cliente.Password : PasswordHelper.Hash(obj.Password);
                     cliente.IdCiudad = obj.IdCiudad;
                     cliente.Habilitado = obj.Habilitado;
 

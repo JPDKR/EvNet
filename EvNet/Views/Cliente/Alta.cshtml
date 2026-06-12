@@ -1,63 +1,76 @@
-﻿@model EvNet.Data.Clientes
+@model EvNet.Data.Clientes
 
 @{
-    ViewBag.Title = "Alta";
+    ViewBag.Title = "Nuevo Cliente";
 }
 
-@using (Html.BeginForm("Alta", "Cliente", FormMethod.Post))
-{
-<fieldset>
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true)
-    <table>
-        <tr>
-            <td>@Html.LabelFor(a => a.Nombre)</td>
-            <td>@Html.TextBoxFor(a => a.Nombre)</td>
-            <td>@Html.ValidationMessageFor(a => a.Nombre)</td>
-        </tr>
-        <tr>
-            <td>@Html.LabelFor(a => a.Apellido)</td>
-            <td>@Html.TextBoxFor(a => a.Apellido)</td>
-            <td>@Html.ValidationMessageFor(a => a.Apellido)</td>
-        </tr>
-        <tr>
-            <td>@Html.LabelFor(a => a.Domicilio)</td>
-            <td>@Html.TextBoxFor(a => a.Domicilio)</td>
-            <td>@Html.ValidationMessageFor(a => a.Domicilio)</td>
-        </tr>
-        <tr>
-            <td>@Html.LabelFor(a => a.Email)</td>
-            <td>@Html.TextBoxFor(a => a.Email)</td>
-            <td>@Html.ValidationMessageFor(a => a.Email)</td>
-        </tr>
-        <tr>
-            <td>@Html.LabelFor(a => a.Password)</td>
-            <td>@Html.PasswordFor(a => a.Password)</td>
-            <td>@Html.ValidationMessageFor(a => a.Password)</td>
-        </tr>
-        <tr>
-            <td>@Html.LabelFor(a => a.Ciudades)</td>
-            <td>@Html.DropDownListFor(a => a.IdCiudad, new SelectList(ViewBag.Ciudades, "Id", "Nombre"))</td>
-            <td>@Html.ValidationMessageFor(a => a.Ciudades)</td>
-        </tr>
-        <tr>
-            <td>@Html.LabelFor(a => a.Habilitado)</td>
-            <td>@Html.CheckBoxFor(a => a.Habilitado)</td>
-            <td>@Html.ValidationMessageFor(a => a.Habilitado)</td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                <input type="submit" value="Alta" />
-            </td>
-            <td></td>
-        </tr>
-        <tr>
-            @if (ViewBag.ErrorLog)
-            {
-                <td><label for="NameFilter" style="color:red">Ocurrió un error</label></td>
-            }
-        </tr>
-    </table>
-</fieldset>
-}
+<div class="page-header">
+    <h2><span class="glyphicon glyphicon-user"></span> Nuevo Cliente</h2>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        @if (ViewBag.ErrorLog == true)
+        {
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+                <span class="glyphicon glyphicon-exclamation-sign"></span> Ocurrió un error al guardar el cliente.
+            </div>
+        }
+
+        @using (Html.BeginForm("Alta", "Cliente", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="panel panel-default">
+                <div class="panel-heading"><strong>Datos del Cliente</strong></div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        @Html.LabelFor(a => a.Nombre, new { @class = "control-label" })
+                        @Html.TextBoxFor(a => a.Nombre, new { @class = "form-control", placeholder = "Nombre" })
+                        @Html.ValidationMessageFor(a => a.Nombre, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(a => a.Apellido, new { @class = "control-label" })
+                        @Html.TextBoxFor(a => a.Apellido, new { @class = "form-control", placeholder = "Apellido" })
+                        @Html.ValidationMessageFor(a => a.Apellido, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(a => a.Domicilio, new { @class = "control-label" })
+                        @Html.TextBoxFor(a => a.Domicilio, new { @class = "form-control", placeholder = "Dirección" })
+                        @Html.ValidationMessageFor(a => a.Domicilio, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(a => a.Email, new { @class = "control-label" })
+                        @Html.TextBoxFor(a => a.Email, new { @class = "form-control", placeholder = "correo@ejemplo.com" })
+                        @Html.ValidationMessageFor(a => a.Email, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(a => a.Password, new { @class = "control-label" })
+                        @Html.PasswordFor(a => a.Password, new { @class = "form-control", placeholder = "Contraseña" })
+                        @Html.ValidationMessageFor(a => a.Password, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(a => a.Ciudades, "Ciudad", new { @class = "control-label" })
+                        @Html.DropDownListFor(a => a.IdCiudad, new SelectList(ViewBag.Ciudades, "Id", "Nombre"), "-- Seleccioná una ciudad --", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(a => a.Ciudades, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label>
+                                @Html.CheckBoxFor(a => a.Habilitado) Habilitado
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <button type="submit" class="btn btn-success">
+                        <span class="glyphicon glyphicon-ok"></span> Guardar Cliente
+                    </button>
+                    @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-default" })
+                </div>
+            </div>
+        }
+    </div>
+</div>
